@@ -51,18 +51,24 @@ class LessonListTile extends StatelessWidget {
     // TODO: Add styles to leading and trailing text
     // TODO: Add teacher display
     // TODO: Add color display?
+    const timeStyle = TextStyle(fontSize: 16);
+
     return ListTile(
       title: Text(lesson.name),
       subtitle: lesson.classroom != null ? Text(lesson.classroom!) : null,
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 5.0,
+        // -3 instead of 0 would be ideal but that's illegal
+        spacing: lesson.classroom != null ? 2.0 : 0,
         children: [
-          Text(lesson.begin.format(context)),
-          Text(lesson.end.format(context)),
+          Text(lesson.begin.format(context), style: timeStyle),
+          Text(lesson.end.format(context), style: timeStyle),
         ],
       ),
-      trailing: Text((lessonNum + 1).toString()),
+      trailing: Text(
+        (lessonNum + 1).toString(),
+        style: TextStyle(fontSize: 28),
+      ),
     );
   }
 }
@@ -78,7 +84,10 @@ class DayWidget extends StatelessWidget {
       child: Column(
         children: [
           // TODO: Add styles to this text
-          Text(weekDaysNames[day.dayOfTheWeek]!),
+          Text(
+            weekDaysNames[day.dayOfTheWeek]!,
+            style: TextStyle(fontSize: 20),
+          ),
           for (Lesson lesson in day.lessons)
             LessonWidget(
               lesson: lesson,

@@ -115,6 +115,7 @@ class _TimeInputFieldState extends State<TimeInputField> {
         filled: false,
         labelText: widget.label,
         border: OutlineInputBorder(),
+        suffixIcon: Icon(Icons.access_time)
       ),
       onTap: () async {
         final TimeOfDay? time = await showTimePicker(
