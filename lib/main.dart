@@ -16,6 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int currPage = 0;
+  List<Day> schedule = week;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,11 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(title: Text("Clockwork"), centerTitle: true),
         body: <Widget>[
-          ListView(children: [for (final Day day in week) DayWidget(day: day)]),
+          ListView.separated(
+            itemBuilder: (context, index) => DayWidget(day: schedule[index]),
+            separatorBuilder: (context, index) => SizedBox(height: 8.0),
+            itemCount: schedule.length,
+          ),
           Center(child: Text("Notifications")),
           Center(child: Text("Menu")),
         ][currPage],
@@ -39,9 +44,11 @@ class _MyAppState extends State<MyApp> {
               icon: Badge(child: Icon(Icons.notifications_sharp)),
               label: 'Notifications',
             ),
-            NavigationDestination(icon: Icon(Icons.menu),
-            selectedIcon: Icon(Icons.menu_open),
-             label: 'Menu'),
+            NavigationDestination(
+              icon: Icon(Icons.menu),
+              selectedIcon: Icon(Icons.menu_open),
+              label: 'Menu',
+            ),
           ],
           onDestinationSelected: (int index) {
             setState(() {
