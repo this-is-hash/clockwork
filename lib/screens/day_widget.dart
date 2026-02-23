@@ -1,4 +1,5 @@
 import 'package:clockwork/data/lesson.dart';
+import 'package:clockwork/screens/edit_screen.dart';
 import 'package:flutter/material.dart';
 
 class LessonWidget extends StatelessWidget {
@@ -22,6 +23,12 @@ class LessonWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           debugPrint("${lesson.name} card tapped.");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditLessonScreen(lesson: lesson),
+            ),
+          );
         },
         child: LessonListTile(lesson: lesson, lessonNum: lessonNum),
       ),
@@ -41,6 +48,9 @@ class LessonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add styles to leading and trailing text
+    // TODO: Add teacher display
+    // TODO: Add color display?
     return ListTile(
       title: Text(lesson.name),
       subtitle: lesson.classroom != null ? Text(lesson.classroom!) : null,
@@ -67,9 +77,13 @@ class DayWidget extends StatelessWidget {
     return Card.filled(
       child: Column(
         children: [
+          // TODO: Add styles to this text
           Text(weekDaysNames[day.dayOfTheWeek]!),
           for (Lesson lesson in day.lessons)
-            LessonWidget(lesson: lesson, lessonNum: day.lessons.indexOf(lesson)),
+            LessonWidget(
+              lesson: lesson,
+              lessonNum: day.lessons.indexOf(lesson),
+            ),
         ],
       ),
     );
