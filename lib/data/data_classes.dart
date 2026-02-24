@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'json_helpers.g.dart';
+part 'data_classes.g.dart';
 
 enum DayOfTheWeek {
   monday,
@@ -34,23 +34,39 @@ Map<String, DayOfTheWeek> weekDaysValues = {
   "Sunday": DayOfTheWeek.sunday,
 };
 
+Map<DayOfTheWeek, int> dotwNumbers = {
+  DayOfTheWeek.monday: 0,
+  DayOfTheWeek.tuesday: 1,
+  DayOfTheWeek.wednesday: 2,
+  DayOfTheWeek.thursday: 3,
+  DayOfTheWeek.friday: 4,
+  DayOfTheWeek.saturday: 5,
+  DayOfTheWeek.sunday: 6,
+};
+
 @JsonSerializable()
 class Lesson {
   Lesson(
     this.name,
     this.begin,
     this.end, {
+    required this.dayOfTheWeek,
     // this.color,
     this.classroom,
     this.teacher,
+    required this.id,
   });
 
   String name;
+  int id;
 
   @JsonKey(name: "begin", fromJson: _todFromJson, toJson: _todToJson)
   TimeOfDay begin;
   @JsonKey(name: "end", fromJson: _todFromJson, toJson: _todToJson)
   TimeOfDay end;
+
+  @JsonKey(name: "dotw", fromJson: dotwFromString, toJson: dotwToString)
+  DayOfTheWeek dayOfTheWeek;
 
   // Color? color;
   String? teacher;
@@ -75,7 +91,7 @@ class Lesson {
 class Day {
   Day(this.dayOfTheWeek, this.lessons);
 
-  @JsonKey(name: "dotw", fromJson: _dotwFromString, toJson: _dotwToString)
+  @JsonKey(name: "dotw", fromJson: dotwFromString, toJson: dotwToString)
   DayOfTheWeek dayOfTheWeek;
   List<Lesson> lessons;
 
@@ -88,8 +104,8 @@ class Day {
   /// to JSON. The implementation simply calls the private, generated
   /// helper method `_$DayToJson`.
   Map<String, dynamic> toJson() => _$DayToJson(this);
-
-  static DayOfTheWeek _dotwFromString(String s) => weekDaysValues[s]!;
-
-  static String? _dotwToString(DayOfTheWeek dotw) => weekDaysNames[dotw];
 }
+
+DayOfTheWeek dotwFromString(String s) => weekDaysValues[s]!;
+
+String? dotwToString(DayOfTheWeek dotw) => weekDaysNames[dotw];

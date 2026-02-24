@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clockwork/data/data_classes.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 // Final path in which the schedule is stored is: Documents/PATH
@@ -37,7 +38,7 @@ Future<File> writeScheduleToFile(List<Day> schedule) async {
   return file.writeAsString(jsonEncode(schedule));
 }
 
-Future<List<Day>> readScheduleFromFile() async {
+Future<List<Day>?> readScheduleFromFile() async {
   try {
     final file = await _localFile;
     final contents = await file.readAsString();
@@ -48,6 +49,7 @@ Future<List<Day>> readScheduleFromFile() async {
     );
     return listDecoded;
   } catch (err) {
-    rethrow;
+    debugPrint(err.toString());
+    return null;
   }
 }

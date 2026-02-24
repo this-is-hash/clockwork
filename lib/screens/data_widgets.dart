@@ -1,17 +1,26 @@
 import 'package:clockwork/data/data_classes.dart';
+import 'package:clockwork/data/io.dart';
 import 'package:clockwork/screens/edit_screen.dart';
 import 'package:flutter/material.dart';
 
-class LessonWidget extends StatelessWidget {
-  const LessonWidget({
+// ignore: must_be_immutable
+class LessonWidget extends StatefulWidget {
+  LessonWidget({
     super.key,
     required this.lesson,
     required this.lessonNum,
+    required this.schedule,
   });
 
-  final Lesson lesson;
+  Lesson lesson;
   final int lessonNum;
+  final List<Day> schedule;
 
+  @override
+  State<LessonWidget> createState() => _LessonWidgetState();
+}
+
+class _LessonWidgetState extends State<LessonWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -21,16 +30,46 @@ class LessonWidget extends StatelessWidget {
       // unless you need it.
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {
-          debugPrint("${lesson.name} card tapped.");
-          Navigator.push(
+        onTap: () async {
+          debugPrint("${widget.lesson.name} card tapped.");
+          final newLesson = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditLessonScreen(lesson: lesson),
+              builder: (context) => EditLessonScreen(
+                lesson: widget.lesson,
+                schedule: widget.schedule,
+              ),
             ),
           );
+          if (newLesson != null) {
+            List<Day> newSchedule = widget.schedule;
+            int index = newSchedule
+                .firstWhere(
+                  (Day day) => day.lessons.any(
+                    (Lesson lesson) => lesson.id == newLesson.id,
+                  ),
+                )
+                .lessons
+                .indexWhere((Lesson lesson) => lesson.id == newLesson.id);
+            newSchedule
+                    .firstWhere(
+                      (Day day) => day.lessons.any(
+                        (Lesson lesson) => lesson.id == newLesson.id,
+                      ),
+                    )
+                    .lessons[index] =
+                newLesson;
+
+            writeScheduleToFile(newSchedule);
+          }
+          setState(() {
+            widget.lesson = newLesson ?? widget.lesson;
+          });
         },
-        child: LessonListTile(lesson: lesson, lessonNum: lessonNum),
+        child: LessonListTile(
+          lesson: widget.lesson,
+          lessonNum: widget.lessonNum,
+        ),
       ),
     );
   }
@@ -74,12 +113,15 @@ class LessonListTile extends StatelessWidget {
 }
 
 class DayWidget extends StatelessWidget {
-  const DayWidget({super.key, required this.day});
+  const DayWidget({super.key, required this.day, required this.schedule});
 
   final Day day;
+  final List<Day> schedule;
 
   @override
   Widget build(BuildContext context) {
+    if (day.lessons.isEmpty) return Container();
+    day.lessons.sort((a, b) => a.begin.compareTo(b.begin));
     return Card.filled(
       child: Column(
         children: [
@@ -92,6 +134,7 @@ class DayWidget extends StatelessWidget {
             LessonWidget(
               lesson: lesson,
               lessonNum: day.lessons.indexOf(lesson),
+              schedule: schedule,
             ),
         ],
       ),
