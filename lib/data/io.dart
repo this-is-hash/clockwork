@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:clockwork/data/lesson.dart';
+import 'package:clockwork/data/data_classes.dart';
 import 'package:path_provider/path_provider.dart';
 
 // Final path in which the schedule is stored is: Documents/PATH

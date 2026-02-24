@@ -1,4 +1,4 @@
-import 'package:clockwork/data/lesson.dart';
+import 'package:clockwork/data/data_classes.dart';
 import 'package:flutter/material.dart';
 
 var monday = Day(DayOfTheWeek.monday, [

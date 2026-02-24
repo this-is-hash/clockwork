@@ -1,4 +1,4 @@
-import 'package:clockwork/data/lesson.dart';
+import 'package:clockwork/data/data_classes.dart';
 import 'package:clockwork/screens/edit_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,7 @@ class LessonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Add styles to leading and trailing text
+    // TODO: Add styles to leading text
     // TODO: Add teacher display
     // TODO: Add color display?
     const timeStyle = TextStyle(fontSize: 16);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'lesson.g.dart';
+part 'json_helpers.g.dart';
 
 enum DayOfTheWeek {
   monday,
