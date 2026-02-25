@@ -22,7 +22,10 @@ Day decodeDayFromJsonDebug(String json) {
 
 /// Returns the path to user's Documents directory. This directory contains user-generated files.
 Future<String> get _localPath async {
-  final dir = await getApplicationDocumentsDirectory();
+  final dir =
+      (await getExternalStorageDirectory()) ??
+      await getApplicationDocumentsDirectory();
+  debugPrint(dir.path);
   return dir.path;
 }
 
